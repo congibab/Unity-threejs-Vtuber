@@ -59,3 +59,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 /Client(Web)/node_modules
+
+/Client(Unity-Vtuber)/Logs
+/Client(Unity-Vtuber)/Library
+/Client(Unity-Vtuber)/obj
