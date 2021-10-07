@@ -5,9 +5,28 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFNode, VRM, VRMSchema, VRMSpringBone } from '@pixiv/three-vrm'
 
 
+const sock = new WebSocket("ws://127.0.0.1:5001");
+
+sock.addEventListener("open", e => {
+  console.log("接続が開かれたときに呼び出されるイベント");
+});
+
+sock.addEventListener("message", e => {
+  console.log("Message : " + e.data);
+});
+
+sock.addEventListener("close", e => {
+  console.log("接続が閉じられたときに呼び出されるイベント");
+});
+
+sock.addEventListener("error", e => {
+  console.log("エラーが発生したときに呼び出されるイベント");
+});
+
+
+//=========================================
 window.addEventListener("DOMContentLoaded", () => {
 
-  //============================================
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 1.1, -2);
