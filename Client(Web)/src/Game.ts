@@ -69,14 +69,16 @@ export class Game {
                         scene.add(vrm.scene);
 
                         vrm.lookAt!.target = camera;
-                        head = vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName.Head);
-
+                        head = vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName["Head"]);
+                        
                         //vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName.LeftUpperArm)!.rotation.x = 0.6;
 
                         //vrm.blendShapeProxy!.setValue(VRMSchema.BlendShapePresetName.O, 1.0);
                         //vrm.blendShapeProxy!.update();
                     })
-                }
+                },
+                (progress) => console.log('Loading model...', 100.0 * (progress.loaded / progress.total), '%'),
+                (error) => console.error(error)
             )
 
             window.addEventListener('resize', onWindowResize, false);
@@ -107,7 +109,7 @@ export class Game {
         return this._instance || (this._instance = new this());
     }
 
-    public test(){
+    public test() {
         console.log("test class");
     }
 }

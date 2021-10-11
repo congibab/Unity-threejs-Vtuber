@@ -22,7 +22,7 @@ wss.on('connection', function (ws) {
     ws.send("send test");
 
     ws.on('message', function (message) {
-        console.log('message:', message);
+        console.log('message: ' + message);
     });
 });
 
