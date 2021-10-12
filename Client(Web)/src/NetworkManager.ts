@@ -13,6 +13,18 @@ export class NetworkManager {
 
         sock.addEventListener("message", e => {
             console.log("Message : " + e.data);
+
+            //let Data: string = JSON.parse(e.data);
+            //console.log(Data);
+
+            interface MyObj {
+                myString: string;
+                myNumber: number;
+            }
+
+            let obj: MyObj = JSON.parse('{ "myString": "string", "myNumber": 4 }');
+            console.log(obj.myString);
+            console.log(obj.myNumber);
         });
 
         sock.addEventListener("close", e => {

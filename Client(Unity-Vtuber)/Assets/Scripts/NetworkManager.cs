@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using WebSocketSharp;
 using WebSocketSharp.Net;
 using UnityEngine;
+using static VrmAnimJson;
+using System;
 
 public class NetworkManager : MonoBehaviour
 {
@@ -16,6 +18,9 @@ public class NetworkManager : MonoBehaviour
 
     [SerializeField]
     Animator _animator;
+
+    VrmAnimJson test;
+    string TempJson;
 
     private static NetworkManager _instance = null;
     public static NetworkManager Instance
@@ -57,19 +62,44 @@ public class NetworkManager : MonoBehaviour
 
         };
         ws.Connect();
-        var test = new VrmAnimJson();
 
-        for(int i = 0; i < 55; i++ )
+        test = new VrmAnimJson();
+        for (int i = 0; i < 55; i++)
         {
-            Transform bone = _animator.GetBoneTransform((HumanBodyBones) 10 );
-            float[] rot = new float[4] { bone.localRotation.x, bone.localRotation.y, bone.localRotation.z, bone.localRotation.w};
-            Debug.Log(bone.localRotation);
+            test.vrmanim.Add(new VrmAnim());
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        //ws.Send("pone");
+
+        for (int i = 0; i < 55; i++)
+        {
+            Transform bone = _animator.GetBoneTransform((HumanBodyBones)i);
+            if (bone == null)
+                continue;
+
+            Vector3 pos = bone.localPosition;
+            Quaternion rot = bone.localRotation;
+            Vector3 scl = bone.localScale;
+
+            test.vrmanim[i].keys.pos = pos;
+            test.vrmanim[i].keys.rot = rot;
+            test.vrmanim[i].keys.scl = scl;
+
+            //test.time = (DateTime.Now).ToString();
+            test.vrmanim[i].name = ((HumanBodyBones)i).ToString();
+
+            //Debug.Log(test.vrmanim[i].name + " : " + test.vrmanim[i].keys.rot);
+        }
+
+        string json = JsonUtility.ToJson(test);
+        if (json == TempJson)
+        {
+            return;
+        }
+        TempJson = json;
+        ws.Send(json);
     }
 }

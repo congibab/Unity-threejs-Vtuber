@@ -22,7 +22,16 @@ wss.on('connection', function (ws) {
     ws.send("send test");
 
     ws.on('message', function (message) {
-        console.log('message: ' + message);
+        //console.log('message: ' + message);
+        let data = JSON.parse(message);
+        console.log(data);
+
+        wss.clients.forEach(function each(client) {
+            if (client !== ws) {
+              client.send(message);
+            }
+          });
+
     });
 });
 

@@ -3,24 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class VrmAnimJson
 {
-    public VrmAnim[] vrmanim = new VrmAnim[System.Enum.GetValues(typeof(HumanBodyBones)).Length];
+    public string time = "";
+    public List<VrmAnim> vrmanim = new List<VrmAnim>();
+    //public VrmAnim[] vrmanim;
+    //public VrmAnim vrmanim = new VrmAnim();
+
 
     [Serializable]
     public class VrmAnim
     {
         public string name = "";
         public string bone = "";
-        public key keys;
+        public key keys = new key();
+        
     }
 
     [Serializable]
     public class key
     {
-        public float[] pos;
-        public float[] rot;
-        public float[] scl;
+        public Vector3 pos;
+        public Quaternion rot;
+        public Vector3 scl;
         public long time;
     }
 }
