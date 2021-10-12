@@ -14,6 +14,9 @@ public class NetworkManager : MonoBehaviour
     [SerializeField]
     string Port = "5001";
 
+    [SerializeField]
+    Animator _animator;
+
     private static NetworkManager _instance = null;
     public static NetworkManager Instance
     {
@@ -55,6 +58,13 @@ public class NetworkManager : MonoBehaviour
         };
         ws.Connect();
         var test = new VrmAnimJson();
+
+        for(int i = 0; i < 55; i++ )
+        {
+            Transform bone = _animator.GetBoneTransform((HumanBodyBones) 10 );
+            float[] rot = new float[4] { bone.localRotation.x, bone.localRotation.y, bone.localRotation.z, bone.localRotation.w};
+            Debug.Log(bone.localRotation);
+        }
     }
 
     // Update is called once per frame
