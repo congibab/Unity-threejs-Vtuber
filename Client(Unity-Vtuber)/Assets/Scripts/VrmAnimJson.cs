@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class VrmAnimJson
 {
-    public string time = "";
+    //public string time = "";
     public List<VrmAnim> vrmanim = new List<VrmAnim>();
     //public VrmAnim[] vrmanim;
     //public VrmAnim vrmanim = new VrmAnim();

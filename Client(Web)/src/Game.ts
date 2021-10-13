@@ -70,7 +70,7 @@ export class Game {
 
                         vrm.lookAt!.target = camera;
                         head = vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName["Head"]);
-                        
+
                         //vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName.LeftUpperArm)!.rotation.x = 0.6;
 
                         //vrm.blendShapeProxy!.setValue(VRMSchema.BlendShapePresetName.O, 1.0);

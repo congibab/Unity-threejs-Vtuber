@@ -12,27 +12,19 @@ export class NetworkManager {
         });
 
         sock.addEventListener("message", e => {
-            console.log("Message : " + e.data);
 
-            //let Data: string = JSON.parse(e.data);
-            //console.log(Data);
 
-            interface MyObj {
-                myString: string;
-                myNumber: number;
-            }
+            let Data: VrmAnim[] = JSON.parse(e.data).vrmanim;
+            console.log(Data[0].name);
 
-            let obj: MyObj = JSON.parse('{ "myString": "string", "myNumber": 4 }');
-            console.log(obj.myString);
-            console.log(obj.myNumber);
         });
 
         sock.addEventListener("close", e => {
-            console.log("接続が閉じられたときに呼び出されるイベント");
+            console.log(e);
         });
 
         sock.addEventListener("error", e => {
-            console.log("エラーが発生したときに呼び出されるイベント");
+            console.log(e);
         });
 
         console.log("WepSocket client inti");
@@ -41,4 +33,17 @@ export class NetworkManager {
     public static get Instance() {
         return this._instance || (this._instance = new this());
     }
+}
+
+export interface VrmAnim {
+    name: string;
+    bone: string;
+    keys: key[];
+}
+
+export interface key {
+    pos: number[];
+    rot: number[];
+    scl: number[];
+    time: number;
 }
