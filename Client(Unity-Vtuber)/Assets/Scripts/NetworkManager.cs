@@ -19,8 +19,8 @@ public class NetworkManager : MonoBehaviour
     [SerializeField]
     Animator _animator;
 
-    VrmAnimJson test;
-    string TempJson;
+    private VrmAnimJson _vrmAnimjson;
+    private string TempJson;
 
     private static NetworkManager _instance = null;
     public static NetworkManager Instance
@@ -63,10 +63,15 @@ public class NetworkManager : MonoBehaviour
         };
         ws.Connect();
 
-        test = new VrmAnimJson();
-        for (int i = 0; i < 55; i++)
+        _vrmAnimjson = new VrmAnimJson();
+        for (int i = 0; i < System.Enum.GetValues(typeof(HumanBodyBones)).Length - 1; i++)
         {
-            test.vrmanim.Add(new VrmAnim());
+            //Transform bone = _animator.GetBoneTransform((HumanBodyBones)i);
+
+            //if (bone == null)
+            //    continue;
+
+            _vrmAnimjson.vrmanim.Add(new VrmAnim());
         }
     }
 
@@ -74,7 +79,7 @@ public class NetworkManager : MonoBehaviour
     void Update()
     {
 
-        for (int i = 0; i < 55; i++)
+        for (int i = 0; i < System.Enum.GetValues(typeof(HumanBodyBones)).Length - 1; i++)
         {
             Transform bone = _animator.GetBoneTransform((HumanBodyBones)i);
             if (bone == null)
@@ -84,22 +89,22 @@ public class NetworkManager : MonoBehaviour
             Quaternion rot = bone.localRotation;
             Vector3 scl = bone.localScale;
 
-            test.vrmanim[i].keys.pos = pos;
-            test.vrmanim[i].keys.rot = rot;
-            test.vrmanim[i].keys.scl = scl;
+            _vrmAnimjson.vrmanim[i].keys.pos = pos;
+            _vrmAnimjson.vrmanim[i].keys.rot = rot;
+            _vrmAnimjson.vrmanim[i].keys.scl = scl;
 
             //test.time = (DateTime.Now).ToString();
-            test.vrmanim[i].name = ((HumanBodyBones)i).ToString();
+            _vrmAnimjson.vrmanim[i].name = ((HumanBodyBones)i).ToString();
 
             //Debug.Log(test.vrmanim[i].name + " : " + test.vrmanim[i].keys.rot);
         }
 
-        string json = JsonUtility.ToJson(test);
-        if (json == TempJson)
+        string Data = JsonUtility.ToJson(_vrmAnimjson);
+        if (Data == TempJson)
         {
             return;
         }
-        TempJson = json;
-        ws.Send(json);
+        TempJson = Data;
+        ws.Send(Data);
     }
 }

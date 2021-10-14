@@ -19,15 +19,13 @@ wss.on('connection', function (ws) {
         console.log("disconnect athoer client");
     });
 
-    JSON.stringify(jsontest);
-    ws.send(JSON.stringify(jsontest));
     //ws.send("send test");
 
     ws.on('message', function (message) {
-        console.log('message: ' + message);
+        //console.log('message: ' + message);
         let data = JSON.parse(message);
         //console.log('' +  message);
-        //console.log(data);
+        console.log(data);
 
         wss.clients.forEach(function each(client) {
             if (client !== ws) {

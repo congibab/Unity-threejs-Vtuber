@@ -1,13 +1,15 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { BVHLoader } from 'three/examples/jsm/loaders/BVHLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFNode, VRM, VRMSchema, VRMSpringBone } from '@pixiv/three-vrm'
+import { VrmAnim } from './NetworkManager';
 
 export class Game {
     private static _instance: Game;
+    private currentVRM: VRM;
 
-    private constructor() {
+
+    constructor() {
         window.addEventListener("DOMContentLoaded", () => {
 
             const scene = new THREE.Scene();
@@ -56,7 +58,6 @@ export class Game {
             //==================================
             let mixer: THREE.AnimationMixer;
 
-            let currentVRM: VRM;
             let head: THREE.Object3D | null;
 
             const loader = new GLTFLoader();
@@ -65,13 +66,15 @@ export class Game {
                 (gltf) => {
                     VRM.from(gltf).then((vrm) => {
                         console.log(vrm);
-                        currentVRM = vrm;
+                        this.currentVRM = vrm;
                         scene.add(vrm.scene);
 
                         vrm.lookAt!.target = camera;
-                        head = vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName["Head"]);
+                        //head = vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName["Head"]);
+                        head = vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName.Hips);
+                        //head!.rotation.x = 0.9;
 
-                        //vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName.LeftUpperArm)!.rotation.x = 0.6;
+                        //vrm.humanoid!.getBoneNode(VRMSchema.HumanoidBoneName.LeftUpperArm)!.rotation.x = 0.9;
 
                         //vrm.blendShapeProxy!.setValue(VRMSchema.BlendShapePresetName.O, 1.0);
                         //vrm.blendShapeProxy!.update();
@@ -94,8 +97,8 @@ export class Game {
 
                 let delta = clock.getDelta();
 
-                if (currentVRM) {
-                    currentVRM.update(delta);
+                if (this.currentVRM) {
+                    this.currentVRM.update(delta);
                 }
                 controls.update();
                 renderer.render(scene, camera);
@@ -109,7 +112,23 @@ export class Game {
         return this._instance || (this._instance = new this());
     }
 
-    public test() {
-        console.log("test class");
+    public AnimUpdate(Data: VrmAnim[]) {
+
+        for (let i = 0; i < Data.length; i++) {
+
+            try {
+                let _bone: VRMSchema.HumanoidBoneName = VRMSchema.HumanoidBoneName[Data[i].name as keyof typeof VRMSchema.HumanoidBoneName];
+
+                let test = this.currentVRM.humanoid!.getBoneNode(_bone);
+                let keys = Data[i].keys;
+                //test!.position.copy(keys.pos);
+                test!.quaternion.set(-keys.rot.x, -keys.rot.y, keys.rot.z, keys.rot.w);
+                //test!.scale.copy(keys.scl);
+
+            } catch (error) {
+                console.log(error);
+            }
+
+        }
     }
 }

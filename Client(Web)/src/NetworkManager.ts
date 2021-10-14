@@ -8,14 +8,13 @@ export class NetworkManager {
 
         sock.addEventListener("open", e => {
             console.log("接続が開かれたときに呼び出されるイベント");
-            Game.Instance.test();
         });
 
         sock.addEventListener("message", e => {
 
 
             let Data: VrmAnim[] = JSON.parse(e.data).vrmanim;
-            console.log(Data[0].name);
+            Game.Instance.AnimUpdate(Data);
 
         });
 
@@ -38,12 +37,12 @@ export class NetworkManager {
 export interface VrmAnim {
     name: string;
     bone: string;
-    keys: key[];
+    keys: key;
 }
 
 export interface key {
-    pos: number[];
-    rot: number[];
-    scl: number[];
+    pos: THREE.Vector3;
+    rot: THREE.Quaternion;
+    scl: THREE.Vector3;
     time: number;
 }
